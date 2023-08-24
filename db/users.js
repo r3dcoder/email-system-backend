@@ -1,5 +1,6 @@
 const { getDB } = require("./db");
 
+
 const createUser = async (user) => {
   const db = getDB();
   await db.collection("users").insertOne(user);

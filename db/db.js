@@ -13,6 +13,6 @@ const connectDB = async () => {
   }
 };
 
-const getDB = () => client.db("your-database-name");
+const getDB = () => client.db("email-system");
 
 module.exports = { connectDB, getDB };
