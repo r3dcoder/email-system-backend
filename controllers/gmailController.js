@@ -93,7 +93,16 @@ async function getUser(req, res){
 async function getMails(req, res) {
     try{
         const url = `https://gmail.googleapis.com/gmail/v1/users/${req.params.email}/threads?maxResults=100`;
-        const { token } = await oAuth2Client.getAccessToken();
+        // const { token } = await oAuth2Client.getAccessToken();
+        // const token = req.params.token;
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            return res.status(401).json({ error: 'Authorization header missing' });
+        }
+
+        const token = authHeader.split(' ')[1]; // Assuming "Bearer <token>"
+
         const config = createConfig(url, token);
         const response = await axios(config);
         res.json(response.data);
