@@ -4,9 +4,14 @@ const { connectDB } = require("./db/db");
 const authRoutes = require("./routes/auth");
 const protectedRoutes = require("./routes/protected");
 const mailRouter = require("./routes/gmail-routers");
+const helmet = require('helmet');
+const cors = require('cors'); // Import the cors package
 
 const app = express();
 app.use(bodyParser.json());
+ 
+// Use the cors middleware
+app.use(cors());
 
 // Enable CORS for all routes
 app.use((req, res, next) => {

@@ -16,6 +16,7 @@ oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
 async function sendMail(req, res) {
     try{
+        
         const accessToken = await oAuth2Client.getAccessToken();
         let token = await accessToken.token;
 
@@ -44,12 +45,39 @@ async function sendMail(req, res) {
     }
 }
 
+
+async function getUserEmail(req, res) {
+    token = await req.params.access_token;
+    console.log("accesstoekn: ",token )
+
+  try {
+    const url = "https://www.googleapis.com/oauth2/v2/userinfo?access_token="+token;
+
+    const config = createConfig(url, token);
+        const response = await axios(config);
+        res.json(response.data);
+
+} catch (error) {
+    console.error('Error fetching user email:', error);
+    throw error;
+  }
+}
+
+ 
 async function getUser(req, res){
     try{
         // /gmail/v1/users/:email/profile
-        const url = `https://gmail.googleapis.com/gmail/v1/users/${req.params.email}/profile`;
-        const { token } = await oAuth2Client.getAccessToken();
-        console.log("get user", token);
+        // const { token } = await oAuth2Client.getAccessToken();
+         // Access the token from the header
+        //  const token = req.headers.authorization.split(' ')[1]; // Extract the token part
+         const email =  'sdmahfuz@gmail.com'
+        //  const email =  getUserEmail(token)
+
+         const url = `https://gmail.googleapis.com/gmail/v1/users/${email}/profile`;
+
+
+         console.log("get user", token);
+         console.log("get user", email);
 
         const config = createConfig(url, token);
         const response = await axios(config);
@@ -111,5 +139,6 @@ module.exports = {
     getMails,
     getDrafts,
     readMail,
-    sendMail
+    sendMail,
+    getUserEmail
 };
